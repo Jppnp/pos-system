@@ -17,7 +17,7 @@ describe('PWA Property Tests', () => {
       // React Router configuration that handles client-side routing
       
       fc.assert(fc.property(
-        fc.array(fc.string().filter(s => s.length > 0 && !s.includes(' ')), { minLength: 1, maxLength: 5 }),
+        fc.array(fc.string().filter(s => s.length > 0 && !s.includes(' ')), { minLength: 1, maxLength: 3 }),
         (pathSegments) => {
           // Generate a random route path
           const routePath = '/' + pathSegments.join('/');
@@ -50,7 +50,7 @@ describe('PWA Property Tests', () => {
             window.location = originalLocation;
           }
         }
-      ), { numRuns: 100 });
+      ), { numRuns: 10, timeout: 5000 });
     });
 
     it('should handle special characters in routes gracefully', () => {

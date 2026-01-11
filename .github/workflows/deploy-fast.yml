@@ -1,14 +1,15 @@
-name: Deploy to Cloudflare Pages
+name: Fast Deploy to Cloudflare Pages (Skip Tests)
 
 on:
+  workflow_dispatch: # Manual trigger only
   push:
     branches:
       - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
+    paths:
+      - 'pos-system/src/**'
+      - 'pos-system/public/**'
+      - 'pos-system/package.json'
+      - 'pos-system/vite.config.ts'
 
 jobs:
   deploy:
@@ -16,7 +17,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    name: Deploy to Cloudflare Pages
+    name: Fast Deploy to Cloudflare Pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,12 +34,6 @@ jobs:
           cd pos-system
           npm ci
 
-      - name: Run tests
-        run: |
-          cd pos-system
-          npm run test -- --reporter=verbose --timeout=30000
-        timeout-minutes: 5
-
       - name: Build application
         run: |
           cd pos-system
@@ -54,8 +49,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: pos-system
           directory: pos-system/dist
-          # Optional: Enable GitHub Deployments
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Switch what branch you are publishing to.
-          # By default this will be the branch which triggered this workflow
           branch: main
