@@ -36,8 +36,8 @@ jobs:
       - name: Run tests
         run: |
           cd pos-system
-          npm run test -- --reporter=verbose --timeout=30000
-        timeout-minutes: 5
+          npm run test
+        timeout-minutes: 3
 
       - name: Build application
         run: |
